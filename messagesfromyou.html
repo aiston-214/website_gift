@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Love Letter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fff5f7 0%, #f8e1e9 100%);
+      color: #4a2c40;
+      font-family: 'Lora', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 245, 247, 0.95);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .nav-button {
+      padding: 0.8rem 1.5rem;
+      background: #b76e79;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Parallax Background */
+    .parallax-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .heart-layer {
+      position: absolute;
+      font-size: 2rem;
+      color: rgba(233, 30, 99, 0.3);
+      pointer-events: none;
+    }
+
+    .layer-1 { transform: translateZ(-100px) scale(2); }
+    .layer-2 { transform: translateZ(-50px) scale(1.5); }
+    .layer-3 { transform: translateZ(-25px) scale(1.2); }
+
+    /* Letter Section */
+    .letter {
+      padding: 7rem 2rem 4rem;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      min-height: calc(100vh + 3rem);
+    }
+
+    .letter-title {
+      font-family: 'Great+Vibes', cursive;
+      font-size: 3.5rem;
+      color: #b76e79;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .letter-intro {
+      font-size: 1.2rem;
+      color: #4a2c40;
+      margin-bottom: 2rem;
+    }
+
+    /* Letter Card */
+    .letter-card {
+      background: #fff5f7;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform-style: preserve-3d;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform 1s, scale 1s;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      animation: glow 3s infinite ease-in-out, unfold 1.5s ease-out forwards;
+      z-index: 2;
+    }
+
+    .letter-card.unfold {
+      animation: unfold 1.5s ease-out forwards;
+    }
+
+    @keyframes unfold {
+      0% { transform: rotateX(-90deg) scale(0.8); opacity: 0; }
+      100% { transform: rotateX(0) scale(1); opacity: 1; }
+    }
+
+    .letter-card::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: 18px;
+      background: linear-gradient(45deg, #e91e63, #b76e79, #fff5f7);
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    @keyframes glow {
+      0%, 100% { border-color: rgba(233, 30, 99, 0.4); }
+      50% { border-color: rgba(233, 30, 99, 0.8); }
+    }
+
+    .letter-content {
+      font-size: 1.4rem;
+      color: #4a2c40;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .letter-signature {
+      font-family: 'Great+Vibes', cursive;
+      font-size: 2rem;
+      color: #b76e79;
+      text-align: right;
+      margin-top: 1rem;
+    }
+
+    /* Read Again Button */
+    .read-button {
+      perspective: 1000px;
+      display: inline-block;
+      margin-top: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .read-inner {
+      padding: 1rem 2.5rem;
+      background: #b76e79;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 25px;
+      font-size: 1.2rem;
+      transition: transform 0.4s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .read-button:hover .read-inner {
+      transform: rotateX(360deg);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Sparkles */
+    .sparkles {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #e91e63;
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkle 0.5s ease-out forwards;
+    }
+
+    @keyframes sparkle {
+      0% { opacity: 1; transform: scale(0); }
+      100% { opacity: 0; transform: scale(1.5) translate(var(--x), var(--y)); }
+    }
+
+    /* Heart Accent */
+    .heart-accent {
+      font-size: 3rem;
+      color: #e91e63;
+      margin: 2rem auto;
+      display: block;
+      transition: transform 0.5s;
+      transform-style: preserve-3d;
+      animation: pulse 2s infinite ease-in-out;
+      z-index: 2;
+    }
+
+    .heart-accent:hover {
+      transform: rotateY(360deg) scale(1.2);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Floating Hearts (Confetti) */
+    .heart-float {
+      position: absolute;
+      font-size: calc(1rem + 0.5 * random());
+      color: #e91e63;
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+      left: calc(10% + 80% * random());
+      transform: rotate(calc(30deg * (2 * random() - 1)));
+    }
+
+    @keyframes float {
+      0% { top: 10%; opacity: 0.6; transform: translateX(0) rotate(calc(30deg * (2 * random() - 1))); }
+      50% { opacity: 1; transform: translateX(calc(20px * (2 * random() - 1))) rotate(calc(60deg * (2 * random() - 1))); }
+      100% { top: 80%; opacity: 0; transform: translateX(calc(20px * (2 * random() - 1))) rotate(calc(90deg * (2 * random() - 1))); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .letter { padding: 10rem 1rem 3rem; }
+      .letter-title { font-size: 2.8rem; margin-top: 1rem; }
+      .letter-intro { font-size: 1rem; }
+      .nav-buttons { flex-direction: column; align-items: center; }
+      .nav-button { width: 80%; text-align: center; }
+      .letter-content { font-size: 1.2rem; }
+      .letter-card { padding: 1.5rem; min-height: 350px; }
+      .read-inner { padding: 0.8rem 2rem; font-size: 1rem; }
+      .heart-accent { font-size: 2.5rem; }
+      .sparkle { width: 8px; height: 8px; }
+      .heart-float { font-size: calc(0.8rem + 0.4 * random()); }
+      .letter-signature { font-size: 1.8rem; }
+    }
+
+    @media (max-width: 480px) {
+      .letter { padding: 12rem 1rem 3rem; }
+      .letter-title { font-size: 2.2rem; margin-top: 0.8rem; }
+      .letter-intro { font-size: 0.9rem; }
+      .nav-button { font-size: 0.9rem; padding: 0.7rem 1.2rem; }
+      .letter-content { font-size: 1rem; }
+      .letter-card { padding: 1rem; min-height: 300px; }
+      .heart-accent { font-size: 2rem; }
+      .sparkle { width: 6px; height: 6px; }
+      .heart-float { font-size: calc(0.7rem + 0.3 * random()); }
+      .letter-signature { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="nav-buttons">
+      <a href="D:\gweb\letter.html" class="nav-button" data-tilt data-tilt-max="10">Love Letter</a>
+      <a href="D:\gweb\reasons.html" class="nav-button" data-tilt data-tilt-max="10">Reasons I Love You</a>
+      <a href="D:\gweb\stats.html" class="nav-button" data-tilt data-tilt-max="10">Relationship Stats</a>
+      <a href="D:\gweb\memoryjar.html" class="nav-button" data-tilt data-tilt-max="10">Memory Jar</a>
+      <a href="D:\gweb\messagesfromyou.html" class="nav-button" data-tilt data-tilt-max="10">Messages from you</a>
+      <a href="D:\gweb\badges.html" class="nav-button" data-tilt data-tilt-max="10">Achievement Badges</a>
+      <a href="D:\gweb\moodmessages.html" class="nav-button" data-tilt data-tilt-max="10">Mood Messages</a>
+      <a href="D:\gweb\visionboard.html" class="nav-button" data-tilt data-tilt-max="10">Vision Board</a>
+    </div>
+  </header>
+
+  <!-- Parallax Background -->
+  <div class="parallax-bg">
+    <div class="heart-layer layer-1">❤️</div>
+    <div class="heart-layer layer-2">💖</div>
+    <div class="heart-layer layer-3">💞</div>
+  </div>
+
+  <!-- Letter Section -->
+  <section class="letter">
+    <h2 class="letter-title">A few messages from my love</h2>
+    <p class="letter-intro">A few words from your heart to mine, which gives me butterflies and confidence in every thing in my life.</p>
+    <div class="letter-card" data-tilt data-tilt-max="15">
+      <div class="letter-content" id="letter-content">
+        
+      </div>
+    </div>
+    <div class="read-button">
+      <a href="#" class="read-inner" onclick="reUnfoldLetter()">Read Again <span>💖</span></a>
+      <div class="sparkles" id="sparkles"></div>
+    </div>
+    <span class="heart-accent">❤️</span>
+  </section>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+  <script>
+    // Floating Hearts Animation (Confetti)
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart-float');
+      heart.innerHTML = '💖';
+      heart.style.left = Math.random() * 80 + 10 + '%';
+      heart.style.animationDuration = Math.random() * 2 + 4 + 's';
+      document.querySelector('.letter').appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 600);
+
+    // Parallax Effect
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      document.querySelector('.layer-1').style.transform = `translate(${x}px, ${y}px) translateZ(-100px) scale(2)`;
+      document.querySelector('.layer-2').style.transform = `translate(${x * 0.7}px, ${y * 0.7}px) translateZ(-50px) scale(1.5)`;
+      document.querySelector('.layer-3').style.transform = `translate(${x * 0.4}px, ${y * 0.4}px) translateZ(-25px) scale(1.2)`;
+    });
+
+    // Initialize Vanilla Tilt
+    VanillaTilt.init(document.querySelectorAll('.letter-card, .nav-button'), {
+      max: 15,
+      speed: 400,
+      glare: true,
+      'max-glare': 0.3
+    });
+
+    // Letters Array
+    const letters = [
+      `
+        <p>Maa, enduko teliyadu nitho matladina taruvatha I just felt something. Maa, I just want to share it with you. Actually, bayataki kanipinche Parvathi okati, but nak telisina Parvathi inkokati. Tana life eh veru, tana life lo strugglings eh veru.</p>
+        <p>Intlo prathi situation lo low ga feel ayyi, natho matladadam konchem relaxing ga feel avudam ani anukunna time lo, situation tho sambandam lekunda, everytime nenu ni mood ni spoil chestunnanu maa. Today I understood it, and enduko teliyadu, ivala nuvvu naku oka different angle lo kanipinchav. Niku nuvvu casual ga ne chat chesav ani anipinchi unda vachu, but nuv oka maata annav maa, "I am not good at relations" ani, and "I don’t have any person to share all my feelings" annav. Adi vinagaane na laga ne tanu kuda undi ani anipinchindi maa. And you said life partner tho kuda clumsy ga ipotundi ani annav. Maa, I thought, arey, did I do anything wrong? Nenu tanani ardam chesukolekapoyana ani anipinchindi.</p>
+        <p>But inko pakka okati undi maa. You know how much I love you ani, and you know maa, nenu elanti person oh ani. So, nak oka vishayam ardam ayindi maa, I should change ani. Nuv chala sarlu said, "Be broad-minded" ani. Adi ravali ante konchem time kavali maa. Seriously, nak broad mind ravali ante nak konchem time kavali.</p>
+        <p>Nuvvu intlo stree mottam teesukoni na deggaraki peace kosam vastunnav maa. Ai kuda ivvalekapothe ika enduku maa nenu? Ippati daka nenu chesina vatiki extremely sorry, and ika nunchi you should change me, ela undalo. Idi na order and ni badyatha kuda, ni mogudu ni chakkaga chusukovatam.</p>
+        <p>Ok maa, ippude 12:10 ayindi, 11:30 ki rayatam start chesa. Maa, enduko rasindi takkuva matter ina chala time pattindi, endukante idi rasetappudu lopala unna badha, regret, na meeda nake asahyam anni vachai. Anduke chala kastam meeda type chesa. Heart baruvu perigindi, eyes tadiga ipoyai. Idi matram nenu ninnu ardam chesukoni rasina msg maa. Ardam chesukoni nannu kshamistav ani asisthu, pellam ki tana mogudu iche oka chinna regret letter.</p>
+        <p>Nenu kuda ala anni sarlu unnava maa ani msg chesi undakudadu. Sorry for it, and it won’t repeat again maa. Ok maa, good night maa pellama.</p>
+        <p>I love you maa<br>
+        I miss you maa<br>
+        I kiss you maa<br>
+        I lick you maa<br>
+        I hug you maa<br>
+        I press yours maa<br>
+        I sleep on you maa<br>
+        Bye maa, good night.</p>
+        <p>Sorry sorry, ee msg chadive sarik mrng avutadi, so na pellam garikki good morning, and ivala ina mi mogudu garini disappoint cheyaru ani asisthu, ika selavu.</p>
+        <p>Itlu prematho,<br>
+        <span class="letter-signature">Mi pranam</span></p>
+      `,
+      `
+        <p>Maa, naku teliyadu nuvvu enduku edisavu ani, and enduku feel ayyav ani. You are not saying it to me, I understood it. Nak ardam aina antha varaku, you got something to feel.</p>
+        <p>Maa, nuv edustu u said, "I am crying for you." Can I say one thing? Kanna, manam physical ga ne dooram ga unnam maa, kani mental ga and emotional ga we are one maa. Already tata swami accepted us maa.</p>
+        <p>Manam kalisi lemu ani antava? Actually, ee world lo manaki emi kavali anna, manam daniki edo oka sacrifice cheyali maa. Manam mana life long happy ga undataniki, oka danni kachitam ga sacrifice cheyali maa. I think ade mana present maa. Manam present lo entha kastapadatamo, mana future antha baguntundi.</p>
+        <p>Manam dooram ga undatam vallane manaki okalla meeda okalaki entha love undo ardam ayyedi, nxt vere valla meeda trust perugutadi, malli manam vallaki entha importance istamo telisedi, mana loved ones kosam entha extreme ki velatamo telisedi, valla importance mana life lo entha undi ani telisedi, mana meeda aasalu entha ga pettukunaro ani ardam avutadi. Total ga chepali ante, valle mana life ani telustadi.</p>
+        <p>Finally, nen matram okkati cheppagalanu, kanna, manam kachitam ga billionaires avvabotunnam, pelli chesukobotunnam. Idi fix maa. Ika daily dani gurinchi alochinchaku.</p>
+        <p>Nen matram niku maata istunnanu maa, niku edi kavali ante adi no cheppakunda teesukuvache antha money sampadista, and nuv korukunna dream luxury life ni niku ista maa, that’s for sure.</p>
+        <p>Maa, ika nunchi I’ll become billionaire:<br>
+        To marry you<br>
+        To cuddle you<br>
+        To share bed with you<br>
+        To hug you<br>
+        To kiss you<br>
+        To lick you<br>
+        To pamper you<br>
+        To feel you<br>
+        To smell you<br>
+        To do all the shitty things that I said to you<br>
+        To walk with you<br>
+        To hold your hand<br>
+        To carry you on my back<br>
+        Get access to kiss you in public without any hesitation</p>
+        <p>Maa, nuv ediste nak edo la untundi kanna. Plz maa, edavaku eh. Nak chala badha ga undi kanna, ninnu ala chooste. Nenu appatiki appud emi cheyalenu, inside it hurts me a lot kanna. Ninnu ala choostunte nenu looser ah ani anipinchindi kanna. Plz ika edavaku.</p>
+        <p>Ee sari if you felt like any depressed, okka sari ni mogudu ni gurthu techuko, vadu cheppina maatalu gurthuku techuko, vaditho imagine chesukunna life ni gurthuku techuko, vadu nikosam chestunna efforts ni gurthuku techukoo, vadu ninnu entha love chestunnado gurthu techuko, vadiki nuvvu entha important oh gurthu techuko, ni kallalo neelu chooste vadu em ipotado gurthu techuko.</p>
+        <p>Maa, nitho idi chala sarlu cheppanu, niku kuda ee vishayam chala baga telusu, kani cheptunanu malli: I love you infinite, I only love you, naa bangaram, chitti konda, bujji konda, na luckey stone, naa sweet shop, I love you eh.</p>
+        <p>ummmmmmmmmmmmmmmmaaaaaaaaaaaaaaaaaaaaaaaaaaahhhhhhhhhhhhhhhhhhhhhhhhhhhhh🥰😘😍👄💋👅💞</p>
+        <p>Itlu prematho,<br>
+        <span class="letter-signature">Mi pranam</span></p>
+      `,
+      `
+        <p>Naa bujji bangaram ki na vallane kopam vachindi, nene tanaki kopam teppincha, tana mood completely upset chesa. Daniki regret feel avvatam kanna, tana mood normal cheyatame naku important. Bahusa ee process lo nenu nitho chala cheppabotunna, andulo eh okkati abaddam kadu, endukante evaraina vere vallaki abaddam cheppagalaru, kani tanaki tanu eppudu abaddam cheppaledu.</p>
+        <p>Nenu ni mood ni normal cheyataniki chala alochincha: emanna gift iddama, account lo balance ledu; leda pata padaadama, vamoo dani kanna silent ga undatame nayam; leda vachi massage cheddama, vamoo mamayya nannu champestadu; leda call chesi prema ga matladadama, ante pakkana attaya untaru. So, anduke last ki nak telisina baasha lo, nak telisina pilla ki, nak telisina maatalatho, naku telisina lakshanalu chepdam ani fix ayyanu.</p>
+        <p>Simple ga maatalani kavitha la chepdam anukunna, kani nenu kavi ni kadu eh ani gurthuku vachindi. Naku anni padalu teliyadu, nenu science student ni, so nak telisina science language lo ne chepta, niku kuda ardam ayyidi ani asisthu:</p>
+        <p>According to maths, mana universe lo prathi di oka equation form lo represent cheyachu, alage Parvathi evaru ante pardhu form lo chepachu.</p>
+        <p>According to chemistry, energy anedi electrons fusion jariginapudu kani, nak energy vachedi matram ninnu chusinapudu.</p>
+        <p>According to biology, everything is made up of cells, but nalo everything is made up of you.</p>
+        <p>According to mechanics, energy is transferred from one object to another only when they are in contact, but na varaku ni mata vinte chaluu, automatic ga touch cheyakapoina nau energy vastadi.</p>
+        <p>According to thermodynamics, eh body lo ina entropy always perugutadi, alage na lo ni meeda love always perugutha untadi.</p>
+        <p>According to strength of materials, over time every body ki tana strength taggipotha untadi, kani nuv pakkana unte over time na strength perugutadi.</p>
+        <p>According to fluid mechanics, oka body fluid lo travel chestunapudu dani energy taggipotadii, kani nen nitho travel chestunapudu na energy always peruguthu undi.</p>
+        <p>According to material science, 2 materials kaliste dani properties enhance avutai, alage mana iddaram kaliste mana iddari bond enhance avutadi.</p>
+        <p>According to Newton’s 1st law, body rest lo unte adi ala undatanike istapadatadi, alage nen kuda nitho undatanike istapadutunna.</p>
+        <p>Ila choostu unte, mana iddaram kaliste anni universal laws ni satisfy cheyagalugutunam.</p>
+        <p>Paina cheppinavatillo niku konni ardam avvakapovachu, kani nak ni meeda entha prema undo niku eppudo ardam ayindi ani nak ardam ayindi.</p>
+        <p>Nen matram okkati cheppagalanu: I love you forever, I love only you, naa bangaram, naa bujji konda, naa bangaru konda, naa sweet box, naa lover, naa wife, naa darling, naa baby, naa amma, naa 1st papa, naa universe, I love you eh.</p>
+        <p>❤😘🥰😍💋</p>
+        <p>Itlu prematho,<br>
+        <span class="letter-signature">Mi pranam</span></p>
+      `,
+      `
+        <p>Hi maa, ni mood bagoledu ani annav, kani nak adi enduko ardam kala, kani na bujji konda ala unte nak edo ipotundi, anduke adi pogottataniki na ee chinna prayatnam.</p>
+        <p>Nuvvu badha lo unnanu ani chepte kani ardam chesukoleni vadi tho undatam ni gopppatanam ite, entha cheppina ardam chesukolekapovatam na bandathanam.</p>
+        <p>Naku ontlo bagoledu, pakkana undu ani cheppatam, ni presence nak ippudu avasaram ani chepte, friend ni digapettali ani vellipovatam na pichi tananni cheptundi.</p>
+        <p>Nuvvu natho patu akkadi daka ra ani anatam, natho nuv time spend cheyali ani cheptunte, ledu akkada mi faculty untaru anatam nalo bhayanni cheptundi.</p>
+        <p>Nuv na pakkana nadavali ani na pakkaki vaste, adi na paina niku unna prema ni chepte, ledu pakkana Malliswari undi ani nen pakkaki vellipovatam nalo overthinking ni cheptundi.</p>
+        <p>Ila cheppukuntu velte, prathi vishayam lo nen chesina tappulu naku kanipistunnai. Idi kavali ani chesina tappulu kadu, ela undalo telliyaka jarigina tappulu, kani nen chesina tappula valla nuv entha badha paddavo naku telusu.</p>
+        <p>Nen ee vishayam nitho chala sarlu cheppanu, nenu marathanu ani, kani nake ardam avutundi nenu maraledu ani. Idi antha kani nen inka marataniki prayatnistanu maa, endukante nuv kalalo kuda edavatani tattukolenu.</p>
+        <p>Enduko teliyadu maa, idi type chestunte teliyakunda ne naa cheti meeda naa eye drops padutunnai maa.</p>
+        <p>Akhariki idi kavitha la ledu maa, nen chesina tappula list la undi maa. Kani nuv outcome ni choodavu, efforts ne choostavu ani nak telusu kanna.</p>
+        <p>I love you bujji bangaram ❤❤<br>
+        And I am there for you<br>
+        I never disappoint you<br>
+        Eppudu anni times lo ni hand pattukoni undataniki nen unnanu.</p>
+        <p>Itlu prematho,<br>
+        <span class="letter-signature">Mi pranam</span></p>
+      `
+    ];
+
+    let currentLetterIndex = 0;
+
+    // Re-Unfold Letter Animation with Alternating Letters
+    function reUnfoldLetter() {
+      const letterCard = document.querySelector('.letter-card');
+      const letterContent = document.getElementById('letter-content');
+      const sparklesContainer = document.getElementById('sparkles');
+
+      // Toggle letter
+      currentLetterIndex = (currentLetterIndex + 1) % letters.length;
+      letterContent.innerHTML = letters[currentLetterIndex];
+
+      // Trigger unfold animation
+      letterCard.classList.remove('unfold');
+      void letterCard.offsetWidth; // Force reflow
+      letterCard.classList.add('unfold');
+
+      // Create sparkles
+      sparklesContainer.innerHTML = '';
+      for (let i = 0; i < 8; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.classList.add('sparkle');
+        const angle = Math.random() * 360;
+        const distance = Math.random() * 50 + 20;
+        sparkle.style.setProperty('--x', `${Math.cos(angle * Math.PI / 180) * distance}px`);
+        sparkle.style.setProperty('--y', `${Math.sin(angle * Math.PI / 180) * distance}px`);
+        sparkle.style.animationDelay = `${Math.random() * 0.3}s`;
+        sparklesContainer.appendChild(sparkle);
+      }
+
+      return false; // Prevent default link behavior
+    }
+  </script>
+</body>
+</html>

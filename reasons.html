@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Reasons I Love You</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fff5f7 0%, #f8e1e9 100%);
+      color: #4a2c40;
+      font-family: 'Lora', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 245, 247, 0.95);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .nav-button {
+      padding: 0.8rem 1.5rem;
+      background: #b76e79;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Parallax Background */
+    .parallax-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .heart-layer {
+      position: absolute;
+      font-size: 2rem;
+      color: rgba(233, 30, 99, 0.3);
+      pointer-events: none;
+    }
+
+    .layer-1 { transform: translateZ(-100px) scale(2); }
+    .layer-2 { transform: translateZ(-50px) scale(1.5); }
+    .layer-3 { transform: translateZ(-25px) scale(1.2); }
+
+    /* Reasons Section */
+    .reasons {
+      padding: 6rem 2rem 4rem;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+    }
+
+    .reasons-title {
+      font-family: 'Great+Vibes', cursive;
+      font-size: 3.5rem;
+      color: #b76e79;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .reasons-intro {
+      font-size: 1.2rem;
+      color: #4a2c40;
+      margin-bottom: 2rem;
+    }
+
+    /* Message Card */
+    .message-card {
+      background: #fff5f7;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform-style: preserve-3d;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: transform 0.6s, scale 0.6s;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      animation: glow 3s infinite ease-in-out;
+      z-index: 2;
+    }
+
+    .message-card.flip {
+      transform: rotateY(360deg) scale(1.05);
+    }
+
+    .message-card::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: 18px;
+      background: linear-gradient(45deg, #e91e63, #b76e79, #fff5f7);
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    @keyframes glow {
+      0%, 100% { border-color: rgba(233, 30, 99, 0.4); }
+      50% { border-color: rgba(233, 30, 99, 0.8); }
+    }
+
+    .message-content {
+      font-size: 1.6rem;
+      color: #4a2c40;
+      line-height: 1.5;
+    }
+
+    /* Generate Button */
+    .generate-button {
+      perspective: 1000px;
+      display: inline-block;
+      margin-top: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .generate-inner {
+      padding: 1rem 2.5rem;
+      background: #b76e79;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 25px;
+      font-size: 1.2rem;
+      transition: transform 0.4s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .generate-button:hover .generate-inner {
+      transform: rotateX(360deg);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Sparkles */
+    .sparkles {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #e91e63;
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkle 0.5s ease-out forwards;
+    }
+
+    @keyframes sparkle {
+      0% { opacity: 1; transform: scale(0); }
+      100% { opacity: 0; transform: scale(1.5) translate(var(--x), var(--y)); }
+    }
+
+    /* Heart Accent */
+    .heart-accent {
+      font-size: 3rem;
+      color: #e91e63;
+      margin: 2rem auto;
+      display: block;
+      transition: transform 0.5s;
+      transform-style: preserve-3d;
+      animation: pulse 2s infinite ease-in-out;
+      z-index: 2;
+    }
+
+    .heart-accent:hover {
+      transform: rotateY(360deg) scale(1.2);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Floating Hearts (Confetti) */
+    .heart-float {
+      position: absolute;
+      font-size: calc(1rem + 0.5 * random());
+      color: #e91e63;
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+      left: calc(10% + 80% * random());
+      transform: rotate(calc(30deg * (2 * random() - 1)));
+    }
+
+    @keyframes float {
+      0% { top: 10%; opacity: 0.6; transform: translateX(0) rotate(calc(30deg * (2 * random() - 1))); }
+      50% { opacity: 1; transform: translateX(calc(20px * (2 * random() - 1))) rotate(calc(60deg * (2 * random() - 1))); }
+      100% { top: 80%; opacity: 0; transform: translateX(calc(20px * (2 * random() - 1))) rotate(calc(90deg * (2 * random() - 1))); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .reasons-title { font-size: 2.8rem; }
+      .reasons-intro { font-size: 1rem; }
+      .nav-buttons { flex-direction: column; align-items: center; }
+      .nav-button { width: 80%; text-align: center; }
+      .reasons { padding: 8rem 1rem 3rem; }
+      .message-content { font-size: 1.3rem; }
+      .message-card { padding: 1.5rem; min-height: 140px; }
+      .generate-inner { padding: 0.8rem 2rem; font-size: 1rem; }
+      .heart-accent { font-size: 2.5rem; }
+      .sparkle { width: 8px; height: 8px; }
+      .heart-float { font-size: calc(0.8rem + 0.4 * random()); }
+    }
+
+    @media (max-width: 480px) {
+      .reasons-title { font-size: 2.2rem; }
+      .reasons-intro { font-size: 0.9rem; }
+      .nav-button { font-size: 0.9rem; padding: 0.7rem 1.2rem; }
+      .message-content { font-size: 1.1rem; }
+      .message-card { padding: 1rem; min-height: 120px; }
+      .heart-accent { font-size: 2rem; }
+      .sparkle { width: 6px; height: 6px; }
+      .heart-float { font-size: calc(0.7rem + 0.3 * random()); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="nav-buttons">
+      <a href="D:\gweb\letter.html" class="nav-button" data-tilt data-tilt-max="10">Love Letter</a>
+      <a href="D:\gweb\reasons.html" class="nav-button" data-tilt data-tilt-max="10">Reasons I Love You</a>
+      <a href="D:\gweb\stats.html" class="nav-button" data-tilt data-tilt-max="10">Relationship Stats</a>
+      <a href="D:\gweb\memoryjar.html" class="nav-button" data-tilt data-tilt-max="10">Memory Jar</a>
+      <a href="D:\gweb\messagesfromyou.html" class="nav-button" data-tilt data-tilt-max="10">Messages from you</a>
+      <a href="D:\gweb\badges.html" class="nav-button" data-tilt data-tilt-max="10">Achievement Badges</a>
+      <a href="D:\gweb\moodmessages.html" class="nav-button" data-tilt data-tilt-max="10">Mood Messages</a>
+      <a href="D:\gweb\visionboard.html" class="nav-button" data-tilt data-tilt-max="10">Vision Board</a>
+    </div>
+  </header>
+
+  <!-- Parallax Background -->
+  <div class="parallax-bg">
+    <div class="heart-layer layer-1">❤️</div>
+    <div class="heart-layer layer-2">💖</div>
+    <div class="heart-layer layer-3">💞</div>
+  </div>
+
+  <!-- Reasons Section -->
+  <section class="reasons">
+    <h2 class="reasons-title">Reasons I Love You</h2>
+    <p class="reasons-intro">Click "Generate" to uncover a new reason my heart belongs to you.</p>
+    <div class="message-card" data-tilt data-tilt-max="15">
+      <div class="message-content" id="reason-message">Click "Generate" to reveal why I love you!</div>
+    </div>
+    <div class="generate-button">
+      <a href="#" class="generate-inner" onclick="generateReason()">Generate <span>💖</span></a>
+      <div class="sparkles" id="sparkles"></div>
+    </div>
+    <span class="heart-accent">❤️</span>
+  </section>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+  <script>
+    // Floating Hearts Animation (Confetti)
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart-float');
+      heart.innerHTML = '💖';
+      heart.style.left = Math.random() * 80 + 10 + '%';
+      heart.style.animationDuration = Math.random() * 2 + 4 + 's';
+      document.querySelector('.reasons').appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 600);
+
+    // Parallax Effect
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      document.querySelector('.layer-1').style.transform = `translate(${x}px, ${y}px) translateZ(-100px) scale(2)`;
+      document.querySelector('.layer-2').style.transform = `translate(${x * 0.7}px, ${y * 0.7}px) translateZ(-50px) scale(1.5)`;
+      document.querySelector('.layer-3').style.transform = `translate(${x * 0.4}px, ${y * 0.4}px) translateZ(-25px) scale(1.2)`;
+    });
+
+    // Initialize Vanilla Tilt
+    VanillaTilt.init(document.querySelectorAll('.message-card, .nav-button'), {
+      max: 15,
+      speed: 400,
+      glare: true,
+      'max-glare': 0.3
+    });
+
+    // Random Reasons Array
+    const reasons = [
+      "I love how your laughter fills my heart with joy.",
+      "Your kindness makes every moment brighter.",
+      "I adore the way you make me feel so understood.",
+      "Your passion for life inspires me every day.",
+      "I love how you turn simple moments into memories.",
+      "Your hugs are my favorite place to be.",
+      "I cherish the way you always support my dreams.",
+      "Your quirky humor keeps me smiling endlessly.",
+      "I love how you make every day an adventure.",
+      "Your strength gives me courage to face anything.",
+      "I adore the little ways you show you care.",
+      "Your love for career is so endearing.",
+      "I love how we build our future together.",
+      "Your patience is a gift I’ll always treasure.",
+      "I cherish our quiet moments, just us two.",
+      "I love how your eyes sparkle when you’re happy.",
+      "Your creativity makes our life so vibrant.",
+      "I adore how you make me feel so safe.",
+      "I love the way you love me, fiercely and gently.",
+      "I love your smell and every thing.",
+      "Your heart is my forever home."
+    ];
+
+    // Generate Random Reason
+    function generateReason() {
+      const messageCard = document.querySelector('.message-card');
+      const messageElement = document.getElementById('reason-message');
+      const sparklesContainer = document.getElementById('sparkles');
+
+      // Trigger flip animation
+      messageCard.classList.add('flip');
+      setTimeout(() => {
+        const randomIndex = Math.floor(Math.random() * reasons.length);
+        messageElement.textContent = reasons[randomIndex];
+        messageCard.classList.remove('flip');
+      }, 600);
+
+      // Create sparkles
+      sparklesContainer.innerHTML = '';
+      for (let i = 0; i < 8; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.classList.add('sparkle');
+        const angle = Math.random() * 360;
+        const distance = Math.random() * 50 + 20;
+        sparkle.style.setProperty('--x', `${Math.cos(angle * Math.PI / 180) * distance}px`);
+        sparkle.style.setProperty('--y', `${Math.sin(angle * Math.PI / 180) * distance}px`);
+        sparkle.style.animationDelay = `${Math.random() * 0.3}s`;
+        sparklesContainer.appendChild(sparkle);
+      }
+
+      return false; // Prevent default link behavior
+    }
+  </script>
+</body>
+</html>

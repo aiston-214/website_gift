@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Memory Jar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fff5f7 0%, #f8e1e9 100%);
+      color: #4a2c40;
+      font-family: 'Lora', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 245, 247, 0.95);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .nav-button {
+      padding: 0.8rem 1.5rem;
+      background: #b76e79;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Parallax Background */
+    .parallax-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .heart-layer {
+      position: absolute;
+      font-size: 2rem;
+      color: rgba(233, 30, 99, 0.3);
+      pointer-events: none;
+    }
+
+    .layer-1 { transform: translateZ(-100px) scale(2); }
+    .layer-2 { transform: translateZ(-50px) scale(1.5); }
+    .layer-3 { transform: translateZ(-25px) scale(1.2); }
+
+    /* Memory Jar Section */
+    .memory-jar {
+      padding: 7rem 2rem 4rem;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      min-height: calc(100vh + 3rem);
+    }
+
+    .memory-title {
+      font-family: 'Great+Vibes', cursive;
+      font-size: 3.5rem;
+      color: #b76e79;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .memory-intro {
+      font-size: 1.2rem;
+      color: #4a2c40;
+      margin-bottom: 2rem;
+    }
+
+    /* Memory Card */
+    .memory-card {
+      background: #fff5f7;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform-style: preserve-3d;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform 1s, scale 1s;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      animation: glow 3s infinite ease-in-out, popOut 1.5s ease-out forwards;
+      z-index: 2;
+    }
+
+    .memory-card.pop {
+      animation: popOut 1.5s ease-out forwards;
+    }
+
+    @keyframes popOut {
+      0% { transform: scale(0.8) translateY(50px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .memory-card::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: 18px;
+      background: linear-gradient(45deg, #e91e63, #b76e79, #fff5f7);
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    @keyframes glow {
+      0%, 100% { border-color: rgba(233, 30, 99, 0.4); }
+      50% { border-color: rgba(233, 30, 99, 0.8); }
+    }
+
+    .memory-content {
+      font-size: 1.4rem;
+      color: #4a2c40;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .memory-date {
+      font-weight: 700;
+      color: #e91e63;
+      margin-bottom: 0.5rem;
+    }
+
+    .memory-title-text {
+      font-style: italic;
+      color: #b76e79;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Pick Memory Button */
+    .pick-button {
+      perspective: 1000px;
+      display: inline-block;
+      margin-top: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pick-inner {
+      padding: 1rem 2.5rem;
+      background: #b76e79;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 25px;
+      font-size: 1.2rem;
+      transition: transform 0.4s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pick-button:hover .pick-inner {
+      transform: rotateX(360deg);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Sparkles */
+    .sparkles {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #e91e63;
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkle 0.5s ease-out forwards;
+    }
+
+    @keyframes sparkle {
+      0% { opacity: 1; transform: scale(0); }
+      100% { opacity: 0; transform: scale(1.5) translate(var(--x), var(--y)); }
+    }
+
+    /* Heart Accent */
+    .heart-accent {
+      font-size: 3rem;
+      color: #e91e63;
+      margin: 2rem auto;
+      display: block;
+      transition: transform 0.5s;
+      transform-style: preserve-3d;
+      animation: pulse 2s infinite ease-in-out;
+      z-index: 2;
+    }
+
+    .heart-accent:hover {
+      transform: rotateY(360deg) scale(1.2);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Floating Hearts (Confetti) */
+    .heart-float {
+      position: absolute;
+      font-size: calc(1rem + 0.5 * random());
+      color: #e91e63;
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+      left: calc(10% + 80% * random());
+      transform: rotate(calc(30deg * (2 * random() - 1)));
+    }
+
+    @keyframes float {
+      0% { top: 10%; opacity: 0.6; transform: translateX(0) rotate(calc(30deg * (2 * random() - 1))); }
+      50% { opacity: 1; transform: translateX(calc(20px * (2 * random() - 1))) rotate(calc(60deg * (2 * random() - 1))); }
+      100% { top: 80%; opacity: 0; transform: translateX(calc(20px * (2 * random() - 1))) rotate(calc(90deg * (2 * random() - 1))); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .memory-jar { padding: 10rem 1rem 3rem; }
+      .memory-title { font-size: 2.8rem; margin-top: 1rem; }
+      .memory-intro { font-size: 1rem; }
+      .nav-buttons { flex-direction: column; align-items: center; }
+      .nav-button { width: 80%; text-align: center; }
+      .memory-content { font-size: 1.2rem; }
+      .memory-card { padding: 1.5rem; min-height: 250px; }
+      .pick-inner { padding: 0.8rem 2rem; font-size: 1rem; }
+      .heart-accent { font-size: 2.5rem; }
+      .sparkle { width: 8px; height: 8px; }
+      .heart-float { font-size: calc(0.8rem + 0.4 * random()); }
+    }
+
+    @media (max-width: 480px) {
+      .memory-jar { padding: 12rem 1rem 3rem; }
+      .memory-title { font-size: 2.2rem; margin-top: 0.8rem; }
+      .memory-intro { font-size: 0.9rem; }
+      .nav-button { font-size: 0.9rem; padding: 0.7rem 1.2rem; }
+      .memory-content { font-size: 1rem; }
+      .memory-card { padding: 1rem; min-height: 200px; }
+      .heart-accent { font-size: 2rem; }
+      .sparkle { width: 6px; height: 6px; }
+      .heart-float { font-size: calc(0.7rem + 0.3 * random()); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="nav-buttons">
+      <a href="D:\gweb\letter.html" class="nav-button" data-tilt data-tilt-max="10">Love Letter</a>
+      <a href="D:\gweb\reasons.html" class="nav-button" data-tilt data-tilt-max="10">Reasons I Love You</a>
+      <a href="D:\gweb\stats.html" class="nav-button" data-tilt data-tilt-max="10">Relationship Stats</a>
+      <a href="D:\gweb\memoryjar.html" class="nav-button" data-tilt data-tilt-max="10">Memory Jar</a>
+      <a href="D:\gweb\messagesfromyou.html" class="nav-button" data-tilt data-tilt-max="10">Messages from you</a>
+      <a href="D:\gweb\badges.html" class="nav-button" data-tilt data-tilt-max="10">Achievement Badges</a>
+      <a href="D:\gweb\moodmessages.html" class="nav-button" data-tilt data-tilt-max="10">Mood Messages</a>
+      <a href="D:\gweb\visionboard.html" class="nav-button" data-tilt data-tilt-max="10">Vision Board</a>
+    </div>
+  </header>
+
+  <!-- Parallax Background -->
+  <div class="parallax-bg">
+    <div class="heart-layer layer-1">❤️</div>
+    <div class="heart-layer layer-2">💖</div>
+    <div class="heart-layer layer-3">💞</div>
+  </div>
+
+  <!-- Memory Jar Section -->
+  <section class="memory-jar">
+    <h2 class="memory-title">Our Memory Jar</h2>
+    <p class="memory-intro">A collection of our sweetest moments, tucked away in a jar of love.</p>
+    <div class="memory-card" data-tilt data-tilt-max="15">
+      <div class="memory-content" id="memory-content">
+        
+        <div class="memory-title-text">Your First Birthday in Our Relation</div>
+        <p>That day we and Sai went to Iceberg and celebrated your birthday sweetly and simply. I thought to do so much, but at that time, that is what I could do. I gifted you a simple finger ring and a Ganesha locket, both silver. It was my first time shopping alone for silver items, and I loved it.</p>
+      </div>
+    </div>
+    <div class="pick-button">
+      <a href="#" class="pick-inner" onclick="pickMemory()">Pick a Memory <span>💖</span></a>
+      <div class="sparkles" id="sparkles"></div>
+    </div>
+    <span class="heart-accent">❤️</span>
+  </section>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+  <script>
+    // Floating Hearts Animation (Confetti)
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart-float');
+      heart.innerHTML = '💖';
+      heart.style.left = Math.random() * 80 + 10 + '%';
+      heart.style.animationDuration = Math.random() * 2 + 4 + 's';
+      document.querySelector('.memory-jar').appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 600);
+
+    // Parallax Effect
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      document.querySelector('.layer-1').style.transform = `translate(${x}px, ${y}px) translateZ(-100px) scale(2)`;
+      document.querySelector('.layer-2').style.transform = `translate(${x * 0.7}px, ${y * 0.7}px) translateZ(-50px) scale(1.5)`;
+      document.querySelector('.layer-3').style.transform = `translate(${x * 0.4}px, ${y * 0.4}px) translateZ(-25px) scale(1.2)`;
+    });
+
+    // Initialize Vanilla Tilt
+    VanillaTilt.init(document.querySelectorAll('.memory-card, .nav-button'), {
+      max: 15,
+      speed: 400,
+      glare: true,
+      'max-glare': 0.3
+    });
+
+    // Memories Array
+    const memories = [
+      `
+        
+        <div class="memory-title-text">Your First Birthday in Our Relation</div>
+        <p>That day we and Sai went to Iceberg and celebrated your birthday sweetly and simply. I thought to do so much, but at that time, that is what I could do. I gifted you a simple finger ring and a Ganesha locket, both silver. It was my first time shopping alone for silver items, and I loved it.</p>
+      `,
+      `
+        
+        <div class="memory-title-text">Our Ride</div>
+        <p>That was a magical day because it was the first time I got on your bike to go to the UI publicity. The wind in my hair and your smile made it unforgettable.</p>
+      `,
+      `
+        
+        <div class="memory-title-text">The Surprise Gift</div>
+        <p>You planned surprise gifts when you went to Mumbai and bought me wonderful, cute, amazing jewelry. It’s not about the jewelry; it’s about the effort you put in for me, even with your tight schedule.</p>
+      `,
+      `
+        
+        <div class="memory-title-text">Our First Time at the Beach</div>
+        <p>Chasing waves and building sandcastles, we spent the day lost in each other. Your playful splash fight is a memory I’ll cherish forever.</p>
+      `,
+      `
+        
+        <div class="memory-title-text">Starry Night Drive</div>
+        <p>We drove with the windows down under a blanket of stars. Your hand in mine felt like the whole world was ours. All the night bike drives with you are like a fairytale, and I want many more magical rides with you, babyyy.</p>
+      `,
+      `
+        
+        <div class="memory-title-text">Speed Breaker</div>
+        <p>It was the first time I fell on you when a sudden speed breaker came. I knew you felt happy about it, and I still remember that sweet and cute moment.</p>
+      `
+    ];
+
+    let currentMemoryIndex = 0;
+
+    // Pick Memory Animation
+    function pickMemory() {
+      const memoryCard = document.querySelector('.memory-card');
+      const memoryContent = document.getElementById('memory-content');
+      const sparklesContainer = document.getElementById('sparkles');
+
+      // Toggle memory
+      currentMemoryIndex = (currentMemoryIndex + 1) % memories.length;
+      memoryContent.innerHTML = memories[currentMemoryIndex];
+
+      // Trigger pop-out animation
+      memoryCard.classList.remove('pop');
+      void memoryCard.offsetWidth; // Force reflow
+      memoryCard.classList.add('pop');
+
+      // Create sparkles
+      sparklesContainer.innerHTML = '';
+      for (let i = 0; i < 8; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.classList.add('sparkle');
+        const angle = Math.random() * 360;
+        const distance = Math.random() * 50 + 20;
+        sparkle.style.setProperty('--x', `${Math.cos(angle * Math.PI / 180) * distance}px`);
+        sparkle.style.setProperty('--y', `${Math.sin(angle * Math.PI / 180) * distance}px`);
+        sparkle.style.animationDelay = `${Math.random() * 0.3}s`;
+        sparklesContainer.appendChild(sparkle);
+      }
+
+      return false; // Prevent default link behavior
+    }
+  </script>
+</body>
+</html>

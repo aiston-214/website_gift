@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>For My Love</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fff5f7 0%, #f8e1e9 100%);
+      color: #4a2c40;
+      font-family: 'Lora', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Parallax Background */
+    .parallax-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .heart-layer {
+      position: absolute;
+      font-size: 2rem;
+      color: rgba(233, 30, 99, 0.3);
+      pointer-events: none;
+    }
+
+    .layer-1 { transform: translateZ(-100px) scale(2); }
+    .layer-2 { transform: translateZ(-50px) scale(1.5); }
+    .layer-3 { transform: translateZ(-25px) scale(1.2); }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    h1 {
+      font-family: 'Great+Vibes', cursive;
+      font-size: 4.5rem;
+      color: #b76e79;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: rgba(255, 245, 247, 0.9);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform-style: preserve-3d;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    #typewriter {
+      font-size: 1.6rem;
+      color: #4a2c40;
+      min-height: 2.5em;
+      line-height: 1.5;
+    }
+
+    .heart-3d {
+      font-size: 5rem;
+      color: #e91e63;
+      margin: 2rem auto;
+      display: block;
+      transition: transform 0.5s;
+      transform-style: preserve-3d;
+      animation: pulse 2s infinite ease-in-out;
+      cursor: pointer;
+    }
+
+    .heart-3d:hover {
+      transform: rotateY(360deg) scale(1.2);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .cta-button {
+      perspective: 1000px;
+      display: inline-block;
+      margin-top: 2rem;
+    }
+
+    .cta-inner {
+      padding: 1rem 2.5rem;
+      background: #b76e79;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 25px;
+      font-size: 1.2rem;
+      transition: transform 0.4s;
+      transform-style: preserve-3d;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-button:hover .cta-inner {
+      transform: rotateX(360deg);
+    }
+
+    /* Floating Hearts */
+    .heart-float {
+      position: absolute;
+      font-size: 1.5rem;
+      color: #e91e63;
+      animation: float 8s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0.8); opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-20vh) scale(1.3); opacity: 0; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      h1 { font-size: 3rem; }
+      #typewriter { font-size: 1.2rem; }
+      .heart-3d { font-size: 3.5rem; }
+      .card { padding: 1.5rem; }
+      .cta-inner { padding: 0.8rem 2rem; font-size: 1rem; }
+      .hero { padding: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 2.5rem; }
+      #typewriter { font-size: 1rem; }
+      .heart-3d { font-size: 2.5rem; }
+      .card { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Parallax Background -->
+  <div class="parallax-bg">
+    <div class="heart-layer layer-1">❤️</div>
+    <div class="heart-layer layer-2">💖</div>
+    <div class="heart-layer layer-3">💞</div>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>For My Love</h1>
+    <div class="card" data-tilt data-tilt-max="15">
+      <div id="typewriter"></div>
+    </div>
+    <span class="heart-3d">❤️</span>
+    <div class="cta-button">
+      <a href="D:\gweb\gallery.html" class="cta-inner">Explore Our Story</a>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+  <script>
+    // Typewriter Effect
+    var typed = new Typed('#typewriter', {
+      strings: [
+        "To Pardhu, you light up my world...",
+        "This is our love story, forever etched in my heart.",
+        "Every moment with you is a treasure."
+      ],
+      typeSpeed: 50,
+      backSpeed: 30,
+      backDelay: 2000,
+      loop: true,
+      showCursor: true
+    });
+
+    // Floating Hearts Animation
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart-float');
+      heart.innerHTML = '💖';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = Math.random() * 4 + 6 + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }
+    setInterval(createHeart, 400);
+
+    // Parallax Effect
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      document.querySelector('.layer-1').style.transform = `translate(${x}px, ${y}px) translateZ(-100px) scale(2)`;
+      document.querySelector('.layer-2').style.transform = `translate(${x * 0.7}px, ${y * 0.7}px) translateZ(-50px) scale(1.5)`;
+      document.querySelector('.layer-3').style.transform = `translate(${x * 0.4}px, ${y * 0.4}px) translateZ(-25px) scale(1.2)`;
+    });
+
+    // Initialize Vanilla Tilt
+    VanillaTilt.init(document.querySelector('.card'), {
+      max: 15,
+      speed: 400,
+      glare: true,
+      'max-glare': 0.3
+    });
+  </script>
+</body>
+</html>

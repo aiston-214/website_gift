@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Mood Messages</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fff5f7 0%, #f8e1e9 100%);
+      color: #4a2c40;
+      font-family: 'Lora', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 245, 247, 0.95);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .nav-button {
+      padding: 0.8rem 1.5rem;
+      background: #b76e79;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Parallax Background */
+    .parallax-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .heart-layer {
+      position: absolute;
+      font-size: 2rem;
+      color: rgba(233, 30, 99, 0.3);
+      pointer-events: none;
+    }
+
+    .layer-1 { transform: translateZ(-100px) scale(2); }
+    .layer-2 { transform: translateZ(-50px) scale(1.5); }
+    .layer-3 { transform: translateZ(-25px) scale(1.2); }
+
+    /* Mood Messages Section */
+    .mood-messages {
+      padding: 7rem 2rem 4rem;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      min-height: calc(100vh + 3rem);
+    }
+
+    .mood-messages-title {
+      font-family: 'Great+Vibes', cursive;
+      font-size: 3.5rem;
+      color: #b76e79;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .mood-messages-intro {
+      font-size: 1.2rem;
+      color: #4a2c40;
+      margin-bottom: 2rem;
+    }
+
+    /* Mood Buttons */
+    .mood-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .mood-button {
+      padding: 0.8rem 1.5rem;
+      background: #b76e79;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+    }
+
+    .mood-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Message Card */
+    .message-card {
+      background: #fff5f7;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform-style: preserve-3d;
+      min-height: 150px;
+      position: relative;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      animation: glow 3s infinite ease-in-out;
+      z-index: 2;
+      margin-bottom: 2rem;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .message-card.show {
+      opacity: 1;
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-card::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: 18px;
+      background: linear-gradient(45deg, #e91e63, #b76e79, #fff5f7);
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    @keyframes glow {
+      0%, 100% { border-color: rgba(233, 30, 99, 0.4); }
+      50% { border-color: rgba(233, 30, 99, 0.8); }
+    }
+
+    .message-text {
+      font-size: 1.4rem;
+      color: #4a2c40;
+      line-height: 1.6;
+    }
+
+    .progress-tracker {
+      font-size: 1rem;
+      color: #e91e63;
+      margin-bottom: 1rem;
+    }
+
+    /* Sparkles */
+    .sparkles {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #e91e63;
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkle 0.5s ease-out forwards;
+    }
+
+    @keyframes sparkle {
+      0% { opacity: 1; transform: scale(0); }
+      100% { opacity: 0; transform: scale(1.5) translate(var(--x), var(--y)); }
+    }
+
+    /* Heart Accent */
+    .heart-accent {
+      font-size: 3rem;
+      color: #e91e63;
+      margin: 2rem auto;
+      display: block;
+      transition: transform 0.5s;
+      transform-style: preserve-3d;
+      animation: pulse 2s infinite ease-in-out;
+      z-index: 2;
+    }
+
+    .heart-accent:hover {
+      transform: rotateY(360deg) scale(1.2);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Floating Hearts */
+    .heart-float {
+      position: absolute;
+      font-size: calc(1rem + 0.5 * random());
+      color: #e91e63;
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+      left: calc(10% + 80% * random());
+      transform: rotate(calc(30deg * (2 * random() - 1)));
+    }
+
+    @keyframes float {
+      0% { top: 10%; opacity: 0.6; transform: translateX(0) rotate(calc(30deg * (2 * random() - 1))); }
+      50% { opacity: 1; transform: translateX(calc(20px * (2 * random() - 1))) rotate(calc(60deg * (2 * random() - 1))); }
+      100% { top: 80%; opacity: 0; transform: translateX(calc(20px * (2 * random() - 1))) rotate(calc(90deg * (2 * random() - 1))); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .mood-messages { padding: 10rem 1rem 3rem; }
+      .mood-messages-title { font-size: 2.8rem; margin-top: 1rem; }
+      .mood-messages-intro { font-size: 1rem; }
+      .nav-buttons { flex-direction: column; align-items: center; }
+      .nav-button { width: 80%; text-align: center; }
+      .mood-buttons { grid-template-columns: repeat(2, 1fr); }
+      .mood-button { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
+      .message-card { padding: 1.5rem; min-height: 120px; }
+      .message-text { font-size: 1.2rem; }
+      .progress-tracker { font-size: 0.9rem; }
+      .heart-accent { font-size: 2.5rem; }
+      .sparkle { width: 8px; height: 8px; }
+      .heart-float { font-size: calc(0.8rem + 0.4 * random()); }
+    }
+
+    @media (max-width: 480px) {
+      .mood-messages { padding: 12rem 1rem 3rem; }
+      .mood-messages-title { font-size: 2.2rem; margin-top: 0.8rem; }
+      .mood-messages-intro { font-size: 0.9rem; }
+      .nav-button { font-size: 0.9rem; padding: 0.7rem 1.2rem; }
+      .mood-buttons { grid-template-columns: 1fr; }
+      .mood-button { padding: 0.6rem 1rem; font-size: 0.8rem; }
+      .message-card { padding: 1rem; min-height: 100px; }
+      .message-text { font-size: 1rem; }
+      .progress-tracker { font-size: 0.8rem; }
+      .heart-accent { font-size: 2rem; }
+      .sparkle { width: 6px; height: 6px; }
+      .heart-float { font-size: calc(0.7rem + 0.3 * random()); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="nav-buttons">
+        <a href="D:\gweb\letter.html" class="nav-button" data-tilt data-tilt-max="10">Love Letter</a>
+        <a href="D:\gweb\reasons.html" class="nav-button" data-tilt data-tilt-max="10">Reasons I Love You</a>
+        <a href="D:\gweb\stats.html" class="nav-button" data-tilt data-tilt-max="10">Relationship Stats</a>
+        <a href="D:\gweb\memoryjar.html" class="nav-button" data-tilt data-tilt-max="10">Memory Jar</a>
+        <a href="D:\gweb\messagesfromyou.html" class="nav-button" data-tilt data-tilt-max="10">Messages from you</a>
+        <a href="D:\gweb\badges.html" class="nav-button" data-tilt data-tilt-max="10">Achievement Badges</a>
+        <a href="D:\gweb\moodmessages.html" class="nav-button" data-tilt data-tilt-max="10">Mood Messages</a>
+        <a href="D:\gweb\visionboard.html" class="nav-button" data-tilt data-tilt-max="10">Vision Board</a>
+    </div>
+  </header>
+
+  <!-- Parallax Background -->
+  <div class="parallax-bg">
+    <div class="heart-layer layer-1">❤️</div>
+    <div class="heart-layer layer-2">💖</div>
+    <div class="heart-layer layer-3">💞</div>
+  </div>
+
+  <!-- Mood Messages Section -->
+  <section class="mood-messages">
+    <h2 class="mood-messages-title">Mood Messages</h2>
+    <p class="mood-messages-intro">Choose a mood to receive a heartfelt message from our love story!</p>
+    <div class="progress-tracker" id="progress-tracker">Select a mood to begin</div>
+    <div class="mood-buttons" id="mood-buttons"></div>
+    <div class="message-card" id="message-card">
+      <div class="message-text" id="message-text">Click a mood to see a message!</div>
+      <div class="sparkles" id="sparkles"></div>
+    </div>
+    <span class="heart-accent">❤️</span>
+  </section>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+  <script>
+    // Floating Hearts Animation
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart-float');
+      heart.innerHTML = '💖';
+      heart.style.left = Math.random() * 80 + 10 + '%';
+      heart.style.animationDuration = Math.random() * 2 + 4 + 's';
+      document.querySelector('.mood-messages').appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 600);
+
+    // Parallax Effect
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      document.querySelector('.layer-1').style.transform = `translate(${x}px, ${y}px) translateZ(-100px) scale(2)`;
+      document.querySelector('.layer-2').style.transform = `translate(${x * 0.7}px, ${y * 0.7}px) translateZ(-50px) scale(1.5)`;
+      document.querySelector('.layer-3').style.transform = `translate(${x * 0.4}px, ${y * 0.4}px) translateZ(-25px) scale(1.2)`;
+    });
+
+    // Initialize Vanilla Tilt
+    function initTilt() {
+      VanillaTilt.init(document.querySelectorAll('.mood-button, .message-card, .nav-button'), {
+        max: 15,
+        speed: 400,
+        glare: true,
+        'max-glare': 0.3
+      });
+    }
+
+    // Mood Messages Data
+    const moods = [
+      {
+        name: 'Happy',
+        messages: [
+          'Your laughter is my favorite song, brightening every moment we share.',
+          'Every day with you feels like a celebration of joy and love.',
+          'Your smile turns even the simplest moments into pure happiness.',
+          'Being with you is like living in a world filled with endless sunshine.',
+          'Our silly moments together are the spark that keeps my heart glowing.'
+        ]
+      },
+      {
+        name: 'Romantic',
+        messages: [
+          'I wanna do missionary style with you, infact all including various fore-plays after our marriage.',
+          'I wanna make love with you, I think you understood what I meant.',
+          'Holding your hand feels like holding the entire universe in my palm.',
+          'Our love story is my favorite, written in every glance and touch.',
+          'You are my forever, my always, my everything.'
+        ]
+      },
+      {
+        name: 'Nostalgic',
+        messages: [
+          'Your smile on our first date still lights up my heart.',
+          'I cherish the memory of our first hug, so warm and full of promise.',
+          'Thinking of our late-night talks makes me fall for you all over again.',
+          'Our first trip together feels like yesterday, etched in my soul.',
+          'Every old photo of us brings back of beautiful memories.'
+        ]
+      },
+      {
+        name: 'Playful',
+        messages: [
+          'Chasing you around is my favorite game, and I never want to stop!',
+          'Your teasing grin makes my heart skip a beat every time.',
+          'Your silly romantic jokes are the best part of my day.',
+          'You make every moment a fun adventure, my favorite partner in everything.',
+          'Let’s keep making mischief together, forever and always!'
+        ]
+      },
+      {
+        name: 'Grateful',
+        messages: [
+          'I’m thankful every day for the love we share, so pure and true.',
+          'Your support makes me feel like I can conquer anything.',
+          'I’m grateful for every quiet moment we spend just being us.',
+          'You’ve given me a love I never knew was possible thank you.',
+          'My heart is full knowing you’re by my side through it all.'
+        ]
+      }
+    ];
+
+    // Track displayed messages
+    const displayedMessages = {};
+    moods.forEach(mood => {
+      displayedMessages[mood.name] = [];
+    });
+
+    // Render Mood Buttons
+    function renderMoodButtons() {
+      const moodButtons = document.getElementById('mood-buttons');
+      moodButtons.innerHTML = '';
+      moods.forEach(mood => {
+        const button = document.createElement('button');
+        button.classList.add('mood-button');
+        button.textContent = mood.name;
+        button.addEventListener('click', () => showMessage(mood.name));
+        moodButtons.appendChild(button);
+      });
+      initTilt();
+    }
+
+    // Show Message
+    function showMessage(moodName) {
+      const mood = moods.find(m => m.name === moodName);
+      const messageCard = document.getElementById('message-card');
+      const messageText = document.getElementById('message-text');
+      const sparklesContainer = document.getElementById('sparkles');
+
+      // Get available messages
+      const availableMessages = mood.messages.filter(
+        msg => !displayedMessages[moodName].includes(msg)
+      );
+
+      // Reset if all messages shown
+      if (availableMessages.length === 0) {
+        displayedMessages[moodName] = [];
+        availableMessages.push(...mood.messages);
+      }
+
+      // Select random message
+      const randomMessage = availableMessages[Math.floor(Math.random() * availableMessages.length)];
+      displayedMessages[moodName].push(randomMessage);
+
+      // Update message card
+      messageText.textContent = randomMessage;
+      messageCard.classList.remove('show');
+      void messageCard.offsetWidth; // Trigger reflow
+      messageCard.classList.add('show');
+
+      // Update progress tracker
+      const progressTracker = document.getElementById('progress-tracker');
+      progressTracker.textContent = `Message ${displayedMessages[moodName].length}/${mood.messages.length} for ${moodName}`;
+
+      // Create sparkles
+      sparklesContainer.innerHTML = '';
+      for (let i = 0; i < 8; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.classList.add('sparkle');
+        const angle = Math.random() * 360;
+        const distance = Math.random() * 50 + 20;
+        sparkle.style.setProperty('--x', `${Math.cos(angle * Math.PI / 180) * distance}px`);
+        sparkle.style.setProperty('--y', `${Math.sin(angle * Math.PI / 180) * distance}px`);
+        sparkle.style.animationDelay = `${Math.random() * 0.3}s`;
+        sparklesContainer.appendChild(sparkle);
+      }
+    }
+
+    // Initialize
+    renderMoodButtons();
+    initTilt();
+  </script>
+</body>
+</html>

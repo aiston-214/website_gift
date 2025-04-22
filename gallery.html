@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Our Memories</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fff5f7 0%, #f8e1e9 100%);
+      color: #4a2c40;
+      font-family: 'Lora', sans-serif;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 245, 247, 0.95);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .nav-button {
+      padding: 0.8rem 1.5rem;
+      background: #b76e79;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Parallax Background */
+    .parallax-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .heart-layer {
+      position: absolute;
+      font-size: 2rem;
+      color: rgba(233, 30, 99, 0.3);
+      pointer-events: none;
+    }
+
+    .layer-1 { transform: translateZ(-100px) scale(2); }
+    .layer-2 { transform: translateZ(-50px) scale(1.5); }
+    .layer-3 { transform: translateZ(-25px) scale(1.2); }
+
+    /* Gallery Section */
+    .gallery {
+      padding: 6rem 2rem 4rem;
+      background: rgba(255, 245, 247, 0.95);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .gallery-title {
+      font-family: 'Great+Vibes', cursive;
+      font-size: 3rem;
+      color: #b76e79;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .gallery-card {
+      perspective: 1000px;
+      position: relative;
+      width: 100%;
+      height: 300px;
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+
+    .gallery-front, .gallery-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.6s;
+    }
+
+    .gallery-front {
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gallery-front img, .gallery-front video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .gallery-back {
+      background: #fff5f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1rem;
+      color: #4a2c40;
+      transform: rotateY(180deg);
+    }
+
+    .gallery-card:hover .gallery-front {
+      transform: rotateY(-180deg);
+    }
+
+    .gallery-card:hover .gallery-back {
+      transform: rotateY(0deg);
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+
+    .lightbox-content img, .lightbox-content video {
+      width: 100%;
+      height: auto;
+      max-height: 80vh;
+      border-radius: 10px;
+    }
+
+    .lightbox-content video {
+      max-width: 800px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    /* Floating Hearts */
+    .heart-float {
+      position: absolute;
+      font-size: 1.5rem;
+      color: #e91e63;
+      animation: float 8s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0.8); opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-20vh) scale(1.3); opacity: 0; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .gallery-title { font-size: 2.5rem; }
+      .gallery-card { height: 250px; }
+      .nav-buttons { flex-direction: column; align-items: center; }
+      .nav-button { width: 80%; text-align: center; }
+      .gallery { padding: 5rem 1rem 3rem; }
+      .lightbox-content video { max-width: 90%; }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-title { font-size: 2rem; }
+      .gallery-card { height: 200px; }
+      .nav-button { font-size: 0.9rem; padding: 0.7rem 1.2rem; }
+      .gallery-back { font-size: 0.9rem; }
+      .lightbox-content img, .lightbox-content video { max-height: 70vh; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="nav-buttons">
+      <a href="D:\gweb\letter.html" class="nav-button" data-tilt data-tilt-max="10">Love Letter</a>
+      <a href="D:\gweb\reasons.html" class="nav-button" data-tilt data-tilt-max="10">Reasons I Love You</a>
+      <a href="D:\gweb\stats.html" class="nav-button" data-tilt data-tilt-max="10">Relationship Stats</a>
+      <a href="D:\gweb\memoryjar.html" class="nav-button" data-tilt data-tilt-max="10">Memory Jar</a>
+      <a href="D:\gweb\messagesfromyou.html" class="nav-button" data-tilt data-tilt-max="10">Messages from you</a>
+      <a href="D:\gweb\badges.html" class="nav-button" data-tilt data-tilt-max="10">Achievement Badges</a>
+      <a href="D:\gweb\moodmessages.html" class="nav-button" data-tilt data-tilt-max="10">Mood Messages</a>
+      <a href="D:\gweb\visionboard.html" class="nav-button" data-tilt data-tilt-max="10">Vision Board</a>
+    </div>
+  </header>
+
+  <!-- Parallax Background -->
+  <div class="parallax-bg">
+    <div class="heart-layer layer-1">❤️</div>
+    <div class="heart-layer layer-2">💖</div>
+    <div class="heart-layer layer-3">💞</div>
+  </div>
+
+  <!-- Gallery Section -->
+  <section class="gallery">
+    <h2 class="gallery-title">Our Memories</h2>
+    <div class="gallery-grid" id="gallery-grid"></div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">×</span>
+    <div class="lightbox-content" id="lightbox-content"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+  <script>
+    // WARNING: The file paths below (e.g., 'D:\gweb\1745311657919.jpg') are local and will NOT work when hosted online.
+    // For web deployment (e.g., Netlify, GitHub Pages), move files to a '/media' folder and update paths to relative URLs
+    // (e.g., 'media/1745311657919.jpg'). Copy files from 'D:\gweb\' to '/media/' and update this array accordingly.
+
+    // Media Files Array
+    const mediaFiles = [
+      { type: 'image', src: 'D:\\gweb\\1745311657919.jpg', description: 'My first saree pic to you.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576716.jpg', description: 'A lil smooch for you.' },
+      { type: 'image', src: 'D:\\gweb\\1745311657900.jpg', description: 'The day first you saw me.' },
+      { type: 'video', src: 'D:\\gweb\\WhatsApp Video 2025-04-22 at 19.16.26_048b606e.mp4', thumbnail: 'D:\gweb\Screenshot (238).png', description: 'Our first date and first personal ride.' },
+      { type: 'image', src: 'D:\\gweb\\WhatsApp Image 2025-04-22 at 19.16.18_7d140834.jpg', description: 'Holding hands forever, our first hand prints.' },
+      { type: 'video', src: 'D:\\gweb\\WhatsApp Video 2025-04-22 at 19.10.23_8d7ba023.mp4', thumbnail: 'D:\gweb\Screenshot (238).png', description: 'A cute ghibli video which is our first one.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576459.jpg', description: 'A cute pic of us which is my favroite one too.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576470.jpg', description: 'My cutie pardhu.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576490.jpg', description: 'A big smooch from me .' },
+      { type: 'image', src: 'D:\\gweb\\1745308576523.jpg', description: 'My moon 🧿.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576555.jpg', description: 'Your first interview.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576604.jpg', description: 'first rose from you 🌷.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576656.jpg', description: 'Again a chumma for you' },
+      { type: 'image', src: 'D:\\gweb\\1745308576666.jpg', description: 'first chocolate from you.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576686.jpg', description: 'A first lungi pic of you 😂.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576753.jpg', description: 'Seems to be like an serious discussion between you and my atha.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576782.jpg', description: 'lover boy 💖.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576798.jpg', description: 'My handsome.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576848.jpg', description: 'A smooch from you.' },
+      { type: 'image', src: 'D:\\gweb\\1745308576896.jpg', description: 'Our first semi traditional pic' },
+      { type: 'image', src: 'D:\\gweb\\1745308576922.jpg', description: 'Again a cute ghibli art generation.' },
+      { type: 'image', src: 'D:\\gweb\\1745309117046.jpg', description: 'Drinking something without giving to me but good boy getting hydrated.' },
+      { type: 'image', src: 'D:\\gweb\\1745309117058.jpg', description: 'A gift for you.' },
+      { type: 'image', src: 'D:\\gweb\\1745309117088.jpg', description: 'My little kuchi kuchi boy.' },
+      { type: 'image', src: 'D:\\gweb\\1745309117157.jpg', description: 'My man is getting graduated.' },
+      { type: 'video', src: 'D:\\gweb\\Snapchat-237475529.mp4', thumbnail: 'D:\gweb\Screenshot (238).png', description: 'The day I visted my atharilu first .' }
+    ];
+
+    // Floating Hearts Animation
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart-float');
+      heart.innerHTML = '💖';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = Math.random() * 4 + 6 + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }
+    setInterval(createHeart, 400);
+
+    // Parallax Effect
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      document.querySelector('.layer-1').style.transform = `translate(${x}px, ${y}px) translateZ(-100px) scale(2)`;
+      document.querySelector('.layer-2').style.transform = `translate(${x * 0.7}px, ${y * 0.7}px) translateZ(-50px) scale(1.5)`;
+      document.querySelector('.layer-3').style.transform = `translate(${x * 0.4}px, ${y * 0.4}px) translateZ(-25px) scale(1.2)`;
+    });
+
+    // Populate Gallery
+    const galleryGrid = document.getElementById('gallery-grid');
+    mediaFiles.forEach(file => {
+      const card = document.createElement('div');
+      card.classList.add('gallery-card');
+      card.setAttribute('data-tilt', '');
+      card.setAttribute('data-tilt-max', '10');
+      card.innerHTML = `
+        <div class="gallery-front">
+          ${file.type === 'image' ? `<img src="${file.src}" alt="Memory">` : `<img src="${file.thumbnail}" alt="Video Thumbnail">`}
+        </div>
+        <div class="gallery-back">${file.description}</div>
+      `;
+      galleryGrid.appendChild(card);
+    });
+
+    // Lightbox for Gallery
+    const galleryCards = document.querySelectorAll('.gallery-card');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxContent = document.getElementById('lightbox-content');
+
+    galleryCards.forEach((card, index) => {
+      card.addEventListener('click', () => {
+        const file = mediaFiles[index];
+        if (file.type === 'image') {
+          lightboxContent.innerHTML = `<img src="${file.src}" alt="Memory">`;
+        } else {
+          lightboxContent.innerHTML = `<video controls autoplay><source src="${file.src}" type="video/mp4"></video>`;
+        }
+        lightbox.style.display = 'flex';
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.style.display = 'none';
+      lightboxContent.innerHTML = '';
+    }
+
+    // Initialize Vanilla Tilt
+    VanillaTilt.init(document.querySelectorAll('.gallery-card, .nav-button'), {
+      max: 10,
+      speed: 400,
+      glare: true,
+      'max-glare': 0.3
+    });
+  </script>
+</body>
+</html>

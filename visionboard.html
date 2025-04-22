@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Our Vision Board</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fff5f7 0%, #f8e1e9 100%);
+      color: #4a2c40;
+      font-family: 'Lora', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 245, 247, 0.95);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .nav-button {
+      padding: 0.8rem 1.5rem;
+      background: #b76e79;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Parallax Background */
+    .parallax-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .heart-layer {
+      position: absolute;
+      font-size: 2rem;
+      color: rgba(233, 30, 99, 0.3);
+      pointer-events: none;
+    }
+
+    .layer-1 { transform: translateZ(-100px) scale(2); }
+    .layer-2 { transform: translateZ(-50px) scale(1.5); }
+    .layer-3 { transform: translateZ(-25px) scale(1.2); }
+
+    /* Vision Board Section */
+    .vision-board {
+      padding: 7rem 2rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      min-height: calc(100vh + 3rem);
+    }
+
+    .vision-board-title {
+      font-family: 'Great+Vibes', cursive;
+      font-size: 3.5rem;
+      color: #b76e79;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .vision-board-intro {
+      font-size: 1.2rem;
+      color: #4a2c40;
+      margin-bottom: 2rem;
+    }
+
+    /* Vision Grid */
+    .vision-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .vision-card {
+      perspective: 1000px;
+      position: relative;
+      width: 100%;
+      height: 300px;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      background: #fff5f7;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .vision-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .vision-image {
+      width: 100%;
+      height: 70%;
+      object-fit: cover;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .vision-image.error {
+      background: #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4a2c40;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .vision-caption {
+      padding: 0.5rem;
+      font-size: 1rem;
+      color: #4a2c40;
+      text-align: center;
+      background: #fff5f7;
+      border-radius: 0 0 10px 10px;
+      height: 30%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+      transform: scale(0.8);
+      transition: transform 0.3s ease-out;
+    }
+
+    .lightbox.show .lightbox-content {
+      transform: scale(1);
+    }
+
+    .lightbox-content img {
+      width: 100%;
+      height: auto;
+      max-height: 70vh;
+      border-radius: 10px;
+    }
+
+    .lightbox-caption {
+      color: #fff;
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      text-align: center;
+      max-width: 90%;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    /* Heart Accent */
+    .heart-accent {
+      font-size: 3rem;
+      color: #e91e63;
+      margin: 2rem auto;
+      display: block;
+      transition: transform 0.5s;
+      transform-style: preserve-3d;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    .heart-accent:hover {
+      transform: rotateY(360deg) scale(1.2);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Floating Hearts */
+    .heart-float {
+      position: absolute;
+      font-size: calc(1rem + 0.5 * random());
+      color: #e91e63;
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+      left: calc(10% + 80% * random());
+      transform: rotate(calc(30deg * (2 * random() - 1)));
+    }
+
+    @keyframes float {
+      0% { top: 10%; opacity: 0.6; transform: translateX(0) rotate(calc(30deg * (2 * random() - 1))); }
+      50% { opacity: 1; transform: translateX(calc(20px * (2 * random() - 1))) rotate(calc(60deg * (2 * random() - 1))); }
+      100% { top: 80%; opacity: 0; transform: translateX(calc(20px * (2 * random() - 1))) rotate(calc(90deg * (2 * random() - 1))); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .vision-board { padding: 10rem 1rem 3rem; }
+      .vision-board-title { font-size: 2.8rem; margin-top: 1rem; }
+      .vision-board-intro { font-size: 1rem; }
+      .nav-buttons { flex-direction: column; align-items: center; }
+      .nav-button { width: 80%; text-align: center; }
+      .vision-grid { grid-template-columns: repeat(2, 1fr); }
+      .vision-card { height: 250px; }
+      .vision-caption { font-size: 0.9rem; }
+      .lightbox-caption { font-size: 1rem; }
+      .heart-accent { font-size: 2.5rem; }
+      .heart-float { font-size: calc(0.8rem + 0.4 * random()); }
+    }
+
+    @media (max-width: 480px) {
+      .vision-board { padding: 12rem 1rem 3rem; }
+      .vision-board-title { font-size: 2.2rem; margin-top: 0.8rem; }
+      .vision-board-intro { font-size: 0.9rem; }
+      .nav-button { font-size: 0.9rem; padding: 0.7rem 1.2rem; }
+      .vision-grid { grid-template-columns: 1fr; }
+      .vision-card { height: 200px; }
+      .vision-caption { font-size: 0.8rem; }
+      .lightbox-content img { max-height: 60vh; }
+      .lightbox-caption { font-size: 0.9rem; }
+      .heart-accent { font-size: 2rem; }
+      .heart-float { font-size: calc(0.7rem + 0.3 * random()); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="nav-buttons">
+        <a href="D:\gweb\letter.html" class="nav-button" data-tilt data-tilt-max="10">Love Letter</a>
+        <a href="D:\gweb\reasons.html" class="nav-button" data-tilt data-tilt-max="10">Reasons I Love You</a>
+        <a href="D:\gweb\stats.html" class="nav-button" data-tilt data-tilt-max="10">Relationship Stats</a>
+        <a href="D:\gweb\memoryjar.html" class="nav-button" data-tilt data-tilt-max="10">Memory Jar</a>
+        <a href="D:\gweb\messagesfromyou.html" class="nav-button" data-tilt data-tilt-max="10">Messages from you</a>
+        <a href="D:\gweb\badges.html" class="nav-button" data-tilt data-tilt-max="10">Achievement Badges</a>
+        <a href="D:\gweb\moodmessages.html" class="nav-button" data-tilt data-tilt-max="10">Mood Messages</a>
+        <a href="D:\gweb\visionboard.html" class="nav-button" data-tilt data-tilt-max="10">Vision Board</a>
+    </div>
+  </header>
+
+  <!-- Parallax Background -->
+  <div class="parallax-bg">
+    <div class="heart-layer layer-1">❤️</div>
+    <div class="heart-layer layer-2">💖</div>
+    <div class="heart-layer layer-3">💞</div>
+  </div>
+
+  <!-- Vision Board Section -->
+  <section class="vision-board">
+    <h2 class="vision-board-title">Our Vision Board</h2>
+    <p class="vision-board-intro">A collection of our dreams and aspirations, inspiring our journey together.</p>
+    <div class="vision-grid" id="vision-grid"></div>
+    <span class="heart-accent">❤️</span>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">×</span>
+    <div class="lightbox-content" id="lightbox-content"></div>
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+  <script>
+    // WARNING: The file paths below (e.g., 'D:/gweb/home.png') are local and will NOT work when hosted online.
+    // For web deployment (e.g., Netlify, GitHub Pages), move files to a '/media' folder and update paths to relative URLs
+    // (e.g., 'media/home.png'). Copy files from 'D:\gweb\' to '/media/' and update this array accordingly.
+    // Ensure all files exist in 'D:\gweb\' for local testing via a web server (e.g., VS Code Live Server).
+
+    // Vision Board Items
+    const visionItems = [
+      { image: 'D:/gweb/home.png', caption: 'Building our forever home' },
+      { image: 'D:/gweb/family.png', caption: 'Starting a family' },
+      { image: 'D:/gweb/exploring.png', caption: 'Exploring the world hand in hand' },
+      { image: 'D:/gweb/cafe.png', caption: 'Our cozy cafe shop dates' },
+      { image: 'D:/gweb/sailing.png', caption: 'Sailing into our future' },
+      { image: 'D:/gweb/city.png', caption: 'City lights and love' },
+      { image: 'D:/gweb/garden.png', caption: 'Our personal dream garden' },
+      { image: 'D:/gweb/stargazing.png', caption: 'Stargazing every night' },
+      { image: 'D:/gweb/dancing.png', caption: 'Dancing through life together' },
+      { image: 'D:/gweb/wedding.png', caption: 'Our dream wedding' },
+      { image: 'D:/gweb/plane.png', caption: 'Our private plane' },
+      { image: 'D:/gweb/cruise.png', caption: 'Our private cruise trips' }
+    ];
+
+    // Floating Hearts Animation
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart-float');
+      heart.innerHTML = '💖';
+      heart.style.left = Math.random() * 80 + 10 + '%';
+      heart.style.animationDuration = Math.random() * 2 + 4 + 's';
+      document.querySelector('.vision-board').appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 600);
+
+    // Parallax Effect
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      document.querySelector('.layer-1').style.transform = `translate(${x}px, ${y}px) translateZ(-100px) scale(2)`;
+      document.querySelector('.layer-2').style.transform = `translate(${x * 0.7}px, ${y * 0.7}px) translateZ(-50px) scale(1.5)`;
+      document.querySelector('.layer-3').style.transform = `translate(${x * 0.4}px, ${y * 0.4}px) translateZ(-25px) scale(1.2)`;
+    });
+
+    // Populate Vision Grid
+    const visionGrid = document.getElementById('vision-grid');
+    visionItems.forEach(item => {
+      const card = document.createElement('div');
+      card.classList.add('vision-card');
+      card.setAttribute('data-tilt', '');
+      card.setAttribute('data-tilt-max', '10');
+      card.innerHTML = `
+        <img src="${item.image}" alt="${item.caption}" class="vision-image" onerror="this.classList.add('error'); this.src=''; this.textContent='Image not found';">
+        <div class="vision-caption">${item.caption}</div>
+      `;
+      visionGrid.appendChild(card);
+    });
+
+    // Lightbox for Vision Cards
+    const visionCards = document.querySelectorAll('.vision-card');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxContent = document.getElementById('lightbox-content');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+
+    visionCards.forEach((card, index) => {
+      card.addEventListener('click', () => {
+        const item = visionItems[index];
+        lightboxContent.innerHTML = `<img src="${item.image}" alt="${item.caption}" onerror="this.src=''; this.alt='Image not found';">`;
+        lightboxCaption.textContent = item.caption;
+        lightbox.classList.add('show');
+        lightbox.style.display = 'flex';
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('show');
+      lightbox.style.display = 'none';
+      lightboxContent.innerHTML = '';
+      lightboxCaption.textContent = '';
+    }
+
+    // Initialize Vanilla Tilt
+    VanillaTilt.init(document.querySelectorAll('.vision-card, .nav-button'), {
+      max: 10,
+      speed: 400,
+      glare: true,
+      'max-glare': 0.3
+    });
+  </script>
+</body>
+</html>
